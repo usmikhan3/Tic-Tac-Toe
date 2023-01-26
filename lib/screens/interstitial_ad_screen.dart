@@ -32,8 +32,12 @@ class _InterstitialAdPageState extends State<InterstitialAdPage> {
             isAdLoaded = true;
           });
         },
+
         onAdFailedToLoad: ((error){
           interstitialAd.dispose();
+
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>HomePage(),),);
+
           print(error);
         }),
 
@@ -49,12 +53,12 @@ class _InterstitialAdPageState extends State<InterstitialAdPage> {
     initInterstitialAd();
 
     Timer(const Duration(seconds: 2), (){
-      interstitialAd.show();
+      interstitialAd.show().whenComplete(() {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>HomePage(),),);
+      });
     });
 
-    Timer(const Duration(seconds: 5), (){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>HomePage(),),);
-    });
+
 
 
   }

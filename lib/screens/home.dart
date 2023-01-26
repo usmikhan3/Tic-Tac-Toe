@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -11,6 +13,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+
+  //TODO: BANNER AD
   late BannerAd bannerAd;
   var adUnitId = "ca-app-pub-3940256099942544/6300978111"; //testADID
 
@@ -39,6 +43,37 @@ class _HomePageState extends State<HomePage> {
     );
 
     bannerAd.load();
+  }
+
+
+
+  //TODO: INTERSTITIAL AD
+  late InterstitialAd interstitialAd;
+  var interstitialId = "ca-app-pub-3940256099942544/1033173712";
+
+  bool isAdInterstitialLoaded = true;
+
+  initInterstitialAd() {
+    InterstitialAd.load(
+
+      adUnitId: interstitialId,
+      request: AdRequest(),
+
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad){
+          interstitialAd = ad;
+          setState(() {
+            isAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: ((error){
+          interstitialAd.dispose();
+          print(error);
+        }),
+
+      ),
+
+    );
   }
 
 
@@ -74,6 +109,12 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     initBannerAd();
+
+    initInterstitialAd();
+
+    Timer(const Duration(seconds: 2), (){
+      interstitialAd.show();
+    });
   }
 
   @override
